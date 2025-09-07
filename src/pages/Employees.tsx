@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { Eye, Edit, Trash2 } from 'lucide-react';
 import { mockEmployees } from '../data/mockData';
 import { Employee } from '../types';
+import EmployeeModal from '../components/EmployeeModal';
 
 export default function Employees() {
   const [employees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [modalMode, setModalMode] = useState<'add' | 'edit' | 'view'>('add');
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = 
@@ -22,6 +27,31 @@ export default function Employees() {
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
+  const handleAddEmployee = () => {
+    setSelectedEmployee(null);
+    setModalMode('add');
+    setModalOpen(true);
+  };
+
+  const handleViewEmployee = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setModalMode('view');
+    setModalOpen(true);
+  };
+
+  const handleEditEmployee = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setModalMode('edit');
+    setModalOpen(true);
+  };
+
+  const handleDeleteEmployee = (employee: Employee) => {
+    if (confirm(`هل أنت متأكد من حذف الموظف ${employee.firstName} ${employee.lastName}؟`)) {
+      // Handle delete logic here
+      console.log('Delete employee:', employee.id);
+    }
+  };
+
   return (
     <div className="space-y-6 fade-in">
       {/* Page Header */}
@@ -32,7 +62,7 @@ export default function Employees() {
         </div>
         <button className="btn-primary flex items-center">
           <PlusIcon className="h-5 w-5 ml-2" />
-          إضافة موظف جديد
+          <span onClick={handleAddEmployee}>إضافة موظف جديد</span>
         </button>
       </div>
 
@@ -140,14 +170,23 @@ export default function Employees() {
                   </td>
                   <td className="table-cell">
                     <div className="flex items-center space-x-2 space-x-reverse">
-                      <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                        عرض
+                      <button 
+                        onClick={() => handleViewEmployee(employee)}
+                        className="p-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded"
+                      >
+                        <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-600 hover:text-gray-700 text-sm font-medium">
-                        تعديل
+                      <button 
+                        onClick={() => handleEditEmployee(employee)}
+                        className="p-1 text-green-600 hover:text-green-700 hover:bg-green-50 rounded"
+                      >
+                        <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-red-600 hover:text-red-700 text-sm font-medium">
-                        حذف
+                      <button 
+                        onClick={() => handleDeleteEmployee(employee)}
+                        className="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
@@ -163,6 +202,13 @@ export default function Employees() {
           </div>
         )}
       </div>
+
+      <EmployeeModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        employee={selectedEmployee}
+        mode={modalMode}
+      />
     </div>
   );
 }

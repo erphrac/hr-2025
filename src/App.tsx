@@ -7,6 +7,8 @@ import Departments from './pages/Departments';
 import Attendance from './pages/Attendance';
 import Payroll from './pages/Payroll';
 import Leaves from './pages/Leaves';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -17,15 +19,12 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="employees" element={<Employees />} />
             <Route path="departments" element={<Departments />} />
-            <Route path="attendance" element={<div className="p-6 text-center text-gray-500">صفحة الحضور والانصراف قيد التطوير</div>} />
-            <Route path="leaves" element={<div className="p-6 text-center text-gray-500">صفحة طلبات الإجازات قيد التطوير</div>} />
-            <Route path="payroll" element={<div className="p-6 text-center text-gray-500">صفحة كشوف المرتبات قيد التطوير</div>} />
-            <Route path="reports" element={<div className="p-6 text-center text-gray-500">صفحة التقارير قيد التطوير</div>} />
-            <Route path="settings" element={<div className="p-6 text-center text-gray-500">صفحة الإعدادات قيد التطوير</div>} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="leaves" element={<Leaves />} />
+            <Route path="payroll" element={<Payroll />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/payroll" element={<Payroll />} />
-          <Route path="/leaves" element={<Leaves />} />
         </Routes>
       </div>
     </Router>
